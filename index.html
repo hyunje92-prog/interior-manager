@@ -55,12 +55,19 @@ label { display:block; color:var(--muted); font-size:12px; font-weight:800; marg
 input, select, textarea { width:100%; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); padding:10px 11px; }
 textarea { resize:vertical; min-height:84px; }
 input:focus, select:focus, textarea:focus { outline:2px solid #bfd5e8; border-color:#8bb0cf; }
-.stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
-.stat { background:var(--accent-soft); border-radius:14px; padding:14px; }
-.stat span { display:block; color:var(--muted); font-size:12px; font-weight:800; }
-.stat strong { display:block; font-size:24px; margin-top:4px; }
+.stats { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; align-items:stretch; width:100%; }
+.stat { background:var(--accent-soft); border-radius:14px; padding:18px 16px; min-width:0; overflow:hidden; display:flex; flex-direction:column; justify-content:center; }
+.stat span { display:block; color:var(--muted); font-size:13px; font-weight:800; white-space:normal; word-break:keep-all; overflow-wrap:normal; line-height:1.4; min-width:0; }
+.stat strong { display:block; font-size:clamp(16px,1.45vw,23px); margin-top:8px; white-space:nowrap; word-break:normal; font-variant-numeric:tabular-nums; letter-spacing:-.025em; line-height:1.25; }
 .table-wrap { overflow:auto; border:1px solid var(--line); border-radius:12px; background:#fff; }
+    .materials-scroll.is-scrollable { max-height: 340px; overflow-y: auto; overflow-x: auto; }
+    .materials-scroll.is-scrollable thead th { position: sticky; top: 0; z-index: 2; background: var(--surface, #f7f8fa); }
 table { width:100%; border-collapse:collapse; font-size:13px; }
+/* Keep every task-management table cell on a single line; allow horizontal scrolling instead of awkward wrapping. */
+.task-table { width:max-content; min-width:100%; table-layout:auto; }
+.task-table th, .task-table td { white-space:nowrap; vertical-align:middle; }
+.task-table th { padding-left:12px; padding-right:12px; }
+.task-table td { padding-left:12px; padding-right:12px; }
 th, td { padding:10px 11px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
 th { position:sticky; top:0; z-index:1; background:#f8fafc; color:#546171; font-size:11px; white-space:nowrap; }
 tr:last-child td { border-bottom:0; }
@@ -70,6 +77,21 @@ tr.active-row { background:#eef5fb; }
 .pill.ok { background:#e9f8ef; color:#1d6b49; }
 .pill.warn { background:#fff5e9; color:#a85f08; }
 .pill.danger { background:#fdecec; color:#9c2f2f; }
+.process-tabs { display:flex; gap:8px; overflow-x:auto; padding:2px 2px 10px; margin:0 0 14px; border-bottom:1px solid var(--line); scrollbar-width:thin; }
+.process-toolbar { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin:0 0 14px; }
+.process-toolbar .process-tabs { flex:1; min-width:0; margin:0; }
+.process-toolbar-actions { display:flex; flex:0 0 auto; gap:8px; padding:2px 0 10px; }
+@media (max-width: 900px) {
+  .process-toolbar { flex-direction:column; }
+  .process-toolbar-actions { align-self:flex-end; padding:0 0 10px; }
+}
+.process-tab { flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:11px; padding:9px 13px; background:#fff; color:#475569; font-size:13px; font-weight:800; white-space:nowrap; }
+ .material-process-tabs { margin-top:10px; margin-bottom:10px; }
+.material-process-tabs .process-tab.active { background:var(--primary, #1f4b99); color:#fff; border-color:var(--primary, #1f4b99); }
+.process-tab .tab-count { display:inline-flex; align-items:center; justify-content:center; min-width:22px; height:22px; padding:0 6px; border-radius:999px; background:#eef2f6; color:#526071; font-size:11px; }
+.process-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 3px 8px rgba(31,77,120,.16); }
+.process-tab.active .tab-count { background:rgba(255,255,255,.2); color:#fff; }
+.process-tab:focus-visible { outline:2px solid #8bb0cf; outline-offset:2px; }
 .section-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:12px; }
 .section-head .right { display:flex; gap:8px; flex-wrap:wrap; }
 .note { border-left:4px solid #92b0ca; background:#f5f8fb; padding:10px 12px; color:#51606f; border-radius:10px; font-size:13px; }
@@ -100,7 +122,9 @@ tr.active-row { background:#eef5fb; }
 @media (max-width:1100px) {
   .span-8,.span-7,.span-6,.span-5,.span-4 { grid-column:span 12; }
   .split, .plan-wrap { grid-template-columns:1fr; }
-  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .stats { grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  .stat { padding:15px 13px; }
+  .stat strong { font-size:clamp(17px,2.4vw,22px); }
 }
 @media (max-width:760px) {
   .app { padding:16px 12px 40px; }
@@ -110,7 +134,10 @@ tr.active-row { background:#eef5fb; }
 }
 @media (max-width:520px) {
   .field, .field.wide { grid-column:span 12; }
-  .stats { grid-template-columns:1fr; }
+  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .stat { padding:13px 12px; }
+  .stat span { font-size:12px; line-height:1.35; }
+  .stat strong { font-size:clamp(15px,4vw,18px); letter-spacing:-.02em; }
 }
 @media print {
   body { background:#fff; }
@@ -121,6 +148,165 @@ tr.active-row { background:#eef5fb; }
   .card { margin-bottom:12px; break-inside:avoid; }
   .plan-wrap { display:block; }
 }
+
+    .editor-actions { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+    .editor-actions button { white-space:nowrap; }
+    @media (max-width: 720px) { .editor-actions { justify-content:flex-start; } }
+
+  /* 프로젝트 기본정보는 화면에서 숨기고, 데이터/기존 바인딩은 보존 */
+  .app > .grid > section:first-child { display: none !important; }
+  .calendar-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .calendar-month-label { font-size:1.1rem; font-weight:750; min-width:150px; text-align:center; }
+  .calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); border-top:1px solid var(--line,#e5e7eb); border-left:1px solid var(--line,#e5e7eb); }
+  .calendar-weekday,.calendar-day { min-width:0; border-right:1px solid var(--line,#e5e7eb); border-bottom:1px solid var(--line,#e5e7eb); padding:7px; }
+  .calendar-weekday { background:var(--soft,#f8fafc); text-align:center; font-weight:700; font-size:.85rem; }
+  .calendar-day { min-height:112px; background:var(--card,#fff); }
+  .calendar-day.other-month { background:var(--soft,#f8fafc); opacity:.58; }
+  .calendar-day.today { box-shadow:inset 0 0 0 2px #64748b; }
+  .calendar-date { font-size:.85rem; font-weight:700; margin-bottom:5px; }
+  .calendar-event { display:block; width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border:0; border-radius:5px; margin:3px 0; padding:4px 6px; text-align:left; color:#172033; font-size:.76rem; cursor:pointer; }
+  .calendar-legend { display:flex; flex-wrap:wrap; gap:7px 12px; margin-top:12px; }
+  .calendar-legend-item { display:flex; align-items:center; gap:5px; font-size:.8rem; }
+  .calendar-swatch { width:10px; height:10px; border-radius:3px; display:inline-block; flex:none; }
+  /* 자재 선정 옆에 배치하는 컴팩트 일정 달력 */
+  .calendar-card { min-width:0; }
+  .calendar-card .calendar-toolbar { gap:6px; margin-bottom:9px; }
+  .calendar-card .calendar-toolbar button { padding:7px 9px; font-size:.82rem; }
+  .calendar-card .calendar-month-label { min-width:100px; font-size:1rem; }
+  .calendar-card .calendar-weekday { font-size:.75rem; padding:5px 2px; }
+  .calendar-card .calendar-day { min-height:104px; padding:7px 6px; }
+  .calendar-card .calendar-date { font-size:.84rem; margin-bottom:4px; }
+  .calendar-card .calendar-event { font-size:.74rem; padding:4px 5px; margin:3px 0; }
+  .calendar-card .calendar-legend { gap:5px 9px; margin-top:9px; }
+  .calendar-card .calendar-legend-item { font-size:.72rem; }
+  @media (max-width:1100px) {
+    .calendar-card { grid-column:span 12; }
+    .calendar-card .calendar-day { min-height:100px; }
+    .calendar-card .calendar-event { font-size:.76rem; }
+  }
+  @media(max-width:700px) { .calendar-day { min-height:76px; padding:4px; } .calendar-event { font-size:.68rem; padding:3px 4px; } .calendar-weekday { font-size:.72rem; padding:5px 2px; } }
+
+
+    /* Fix: material category dropdowns and editable fields were squeezed in the narrow side-by-side panel. */
+    .materials-card { min-width:0; overflow:visible; }
+    .materials-card .section-head { flex-wrap:wrap; }
+    .materials-card .material-process-tabs { max-width:100%; }
+    .materials-card .materials-scroll { display:block; width:100%; max-width:100%; overflow-x:auto; overflow-y:auto; }
+    .materials-card .materials-scroll table { min-width:760px; width:760px; table-layout:auto; }
+    .materials-card .materials-scroll th,
+    .materials-card .materials-scroll td { white-space:nowrap; padding:8px 9px; }
+    .materials-card .materials-scroll td select[data-material="category"] { width:145px; min-width:145px; }
+    .materials-card .materials-scroll td select[data-material="status"] { width:110px; min-width:110px; }
+    .materials-card .materials-scroll td input { width:125px; min-width:125px; }
+    .materials-card .materials-scroll td input[data-material="item"] { width:130px; min-width:130px; }
+    .materials-card .materials-scroll td input[data-material="selection"] { width:170px; min-width:170px; }
+    .materials-card .materials-scroll td input[data-material="note"] { width:130px; min-width:130px; }
+    @media (max-width:1100px) {
+      .materials-card { grid-column:span 12; }
+      .materials-card .materials-scroll table { min-width:760px; }
+    }
+
+
+/* Layout refinement: calendar first, materials full-width, drawing canvas full-width */
+.calendar-card { grid-column: 1 / -1; width:100%; }
+.materials-card { grid-column: 1 / -1; width:100%; }
+.plan-wrap { grid-template-columns:minmax(0,1fr) !important; width:100%; }
+.plan-board, .plan-stage, .plan-inner { max-width:100%; }
+.plan-toolbar {
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  overflow-x:auto;
+  padding-bottom:6px;
+  white-space:nowrap;
+}
+.plan-toolbar .tool-group {
+  display:flex;
+  flex:0 0 auto;
+  flex-wrap:nowrap;
+  white-space:nowrap;
+}
+.plan-toolbar .tool-group button { flex:0 0 auto; white-space:nowrap; }
+@media (max-width:900px) {
+  .plan-toolbar { justify-content:flex-start; }
+}
+
+
+/* 달력은 최상단 전체폭, 프로젝트 기본정보는 숨김 */
+#projectInfoSection { display:none !important; }
+#scheduleCalendarSection { display:block !important; visibility:visible !important; grid-column:1 / -1 !important; width:100% !important; }
+
+
+/* 달력 일정에는 공정과 세부 작업명을 모두 표시 */
+.calendar-event {
+  display:flex !important;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:1px;
+  width:100%;
+  white-space:normal !important;
+  text-align:left;
+  line-height:1.2;
+  overflow:hidden;
+}
+.calendar-event-category {
+  display:block;
+  width:100%;
+  font-size:.72em;
+  font-weight:800;
+  opacity:.95;
+  overflow-wrap:anywhere;
+}
+.calendar-event-name {
+  display:block;
+  width:100%;
+  font-size:1em;
+  font-weight:600;
+  overflow-wrap:anywhere;
+}
+
+
+/* 작업 상세 편집: 관련 항목을 요청한 행 단위로 정렬 */
+.task-editor-fields { display:flex; flex-direction:column; gap:12px; min-width:0; }
+.task-editor-row { display:grid; gap:12px; align-items:start; min-width:0; }
+.task-core-row, .task-vendor-row, .task-money-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.task-date-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.task-editor-fields .field { min-width:0; }
+.task-editor-fields input, .task-editor-fields select, .task-editor-fields textarea { width:100%; min-width:0; box-sizing:border-box; }
+@media (max-width:650px) {
+  .task-core-row, .task-vendor-row, .task-money-row, .task-date-row { grid-template-columns:minmax(0,1fr); }
+}
+
+
+/* Force three related fields onto one horizontal row on desktop/tablet */
+.task-editor-fields .task-editor-row.task-core-row,
+.task-editor-fields .task-editor-row.task-vendor-row,
+.task-editor-fields .task-editor-row.task-money-row {
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  width:100%;
+}
+.task-editor-fields .task-editor-row.task-date-row {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  width:100%;
+}
+.task-editor-fields .task-editor-row > .field {
+  grid-column:auto !important;
+  width:100%;
+  max-width:none;
+}
+@media (max-width:650px) {
+  .task-editor-fields .task-editor-row.task-core-row,
+  .task-editor-fields .task-editor-row.task-vendor-row,
+  .task-editor-fields .task-editor-row.task-money-row,
+  .task-editor-fields .task-editor-row.task-date-row {
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -141,7 +327,26 @@ tr.active-row { background:#eef5fb; }
   </header>
 
   <div class="grid">
-    <section class="card span-8">
+    <section class="card span-12 calendar-card" id="scheduleCalendarSection">
+      <div class="section-head">
+        <div>
+          <h2>전체 공정 일정 달력</h2>
+          <p class="helper">모든 공정의 시작일~종료일을 한 달력에서 확인합니다. 작업별 색상으로 구분되며, 달력의 작업을 누르면 해당 작업 편집으로 이동합니다.</p>
+        </div>
+      </div>
+      <div class="calendar-toolbar no-print">
+        <button type="button" id="calendarPrevBtn">‹ 이전 달</button>
+        <div class="calendar-month-label" id="calendarMonthLabel">일정 달력</div>
+        <button type="button" id="calendarNextBtn">다음 달 ›</button>
+        <button type="button" id="calendarTodayBtn">이번 달</button>
+      </div>
+      <div id="scheduleCalendar" class="calendar-grid" aria-label="전체 공정 일정 달력"></div>
+      <div id="calendarLegend" class="calendar-legend"></div>
+    </section>
+
+    
+    
+<section class="card span-12" id="projectInfoSection">
       <div class="section-head">
         <div>
           <h2>프로젝트 기본 정보</h2>
@@ -160,7 +365,7 @@ tr.active-row { background:#eef5fb; }
       </div>
     </section>
 
-    <section class="card span-4">
+    <section class="card span-12">
       <h2>요약 현황</h2>
       <div class="stats">
         <div class="stat"><span>전체 작업</span><strong id="statTasks">0</strong></div>
@@ -175,15 +380,20 @@ tr.active-row { background:#eef5fb; }
       </div>
     </section>
 
+
     <section class="card span-12">
       <div class="section-head">
         <div>
           <h2>공정 작업 관리</h2>
           <p class="helper">공정별 세부 작업을 클릭해서 오른쪽 편집창에서 수정하세요. 견적 비교는 제외하고 실제 진행 관리 위주로 구성했습니다.</p>
         </div>
-        <div class="right no-print">
-          <button id="newTaskBtn">새 작업 추가</button>
-          <button id="duplicateTaskBtn">선택 작업 복제</button>
+      </div>
+      <div class="process-toolbar no-print">
+        <div id="processTabs" class="process-tabs" role="tablist" aria-label="공정별 작업 탭"></div>
+        <div class="process-toolbar-actions">
+          <button class="small" id="addProcessBtn" type="button">+ 공정 추가</button>
+          <button class="small" id="newTaskBtn" type="button">세부 작업 추가</button>
+          <button class="small" id="duplicateTaskBtn" type="button">선택 작업 복제</button>
         </div>
       </div>
       <div class="split">
@@ -194,8 +404,8 @@ tr.active-row { background:#eef5fb; }
             <div class="field"><label for="filterTaskStatus">작업 상태</label><select id="filterTaskStatus"></select></div>
             <div class="field"><label for="searchTask">검색</label><input id="searchTask" placeholder="작업명, 위치, 메모"></div>
           </div>
-          <div class="table-wrap">
-            <table>
+          <div class="table-wrap task-table-wrap">
+            <table class="task-table">
               <thead>
                 <tr>
                   <th>공정</th><th>세부 작업</th><th>위치</th><th>업체 상태</th><th>작업 상태</th><th>업체</th><th>금액</th>
@@ -211,42 +421,42 @@ tr.active-row { background:#eef5fb; }
             <div class="section-head">
               <div>
                 <h3 id="editorTitle">작업 상세 편집</h3>
-                <p class="helper">선택한 작업의 범위, 업체, 비용, 체크리스트, 자재·협의 메모를 관리합니다.</p>
+                <p class="helper">작업 범위, 업체, 일정, 비용 및 필요한 메모를 작업 내용에 통합해 관리합니다.</p>
               </div>
-              <div class="right no-print">
-                <button class="small" id="saveTaskBtn">저장</button>
-                <button class="small danger" id="deleteTaskBtn">삭제</button>
+              <div class="right no-print editor-actions">
+                <button class="small" id="saveTaskBtn" type="button">저장</button>
+                <button class="small danger" id="deleteTaskBtn" type="button">삭제</button>
               </div>
             </div>
-            <div class="field-grid">
+            <div class="task-editor-fields">
               <input id="taskId" type="hidden">
-              <div class="field"><label for="taskCategory">공정 분류</label><select id="taskCategory"></select></div>
-              <div class="field wide"><label for="taskName">세부 작업명</label><input id="taskName"></div>
-              <div class="field"><label for="taskLocation">위치 / 공간</label><input id="taskLocation" placeholder="예: 거실 확장부"></div>
-              <div class="field"><label for="taskContractorStatus">업체 상태</label><select id="taskContractorStatus"></select></div>
-              <div class="field"><label for="taskStatus">작업 상태</label><select id="taskStatus"></select></div>
-              <div class="field"><label for="taskPriority">우선순위</label><select id="taskPriority"><option>상</option><option>중</option><option>하</option></select></div>
-              <div class="field wide"><label for="taskVendor">업체명</label><input id="taskVendor" placeholder="예: 줄눈픽"></div>
-              <div class="field"><label for="taskVendorPhone">업체 연락처</label><input id="taskVendorPhone"></div>
-              <div class="field"><label for="taskPlannedStart">계획 시작일</label><input id="taskPlannedStart" type="date"></div>
-              <div class="field"><label for="taskPlannedEnd">계획 종료일</label><input id="taskPlannedEnd" type="date"></div>
-              <div class="field"><label for="taskExpectedCost">예상 금액</label><input id="taskExpectedCost" type="number" min="0" step="1000"></div>
-              <div class="field"><label for="taskContractAmount">계약 금액</label><input id="taskContractAmount" type="number" min="0" step="1000"></div>
-              <div class="field"><label for="taskPaidAmount">지급 금액</label><input id="taskPaidAmount" type="number" min="0" step="1000"></div>
-              <div class="field"><label for="taskRemaining">잔액</label><input id="taskRemaining" readonly></div>
-              <div class="field full"><label for="taskDescription">작업 내용</label><textarea id="taskDescription" placeholder="시공 범위와 해야 할 작업을 적으세요."></textarea></div>
-              <div class="field wide"><label for="taskChecklist">체크리스트</label><textarea id="taskChecklist" placeholder="줄바꿈으로 체크 항목을 적어두면 아래에 체크박스로 표시됩니다."></textarea></div>
-              <div class="field wide"><label for="taskMaterials">자재 / 제품 메모</label><textarea id="taskMaterials" placeholder="예: 600각 타일, 문선 9mm, 문짝 제품 등"></textarea></div>
-              <div class="field wide"><label for="taskDecisionNotes">협의안 / 시공법 메모</label><textarea id="taskDecisionNotes" placeholder="거실 확장부 샤시 단열처럼 협의가 필요한 항목을 정리하세요."></textarea></div>
-              <div class="field wide"><label for="taskIssueNotes">주의사항 / 리스크</label><textarea id="taskIssueNotes" placeholder="예: 냉장고·세탁기 전용 회로 고려, 철거 범위 미정 등"></textarea></div>
+              <div class="task-editor-row task-core-row">
+                <div class="field" id="taskCategoryField"><label for="taskCategory">공정 분류</label><select id="taskCategory"></select></div>
+                <div class="field"><label for="taskName">세부 작업명</label><input id="taskName"></div>
+                <div class="field"><label for="taskLocation">위치 / 공간</label><input id="taskLocation" placeholder="예: 거실 확장부"></div>
+              </div>
+              <div class="task-editor-row task-vendor-row">
+                <div class="field"><label for="taskVendor">업체명</label><input id="taskVendor" placeholder="예: 줄눈픽"></div>
+                <div class="field"><label for="taskContractorStatus">업체 상태</label><select id="taskContractorStatus"></select></div>
+                <div class="field"><label for="taskStatus">작업 상태</label><select id="taskStatus"></select></div>
+              </div>
+              <div class="task-editor-row task-date-row">
+                <div class="field"><label for="taskPlannedStart">계획 시작일</label><input id="taskPlannedStart" type="date"></div>
+                <div class="field"><label for="taskPlannedEnd">계획 종료일</label><input id="taskPlannedEnd" type="date"></div>
+              </div>
+              <div class="task-editor-row task-money-row">
+                <div class="field"><label for="taskExpectedCost">예상 금액</label><input id="taskExpectedCost" type="number" min="0" step="1000"></div>
+                <div class="field"><label for="taskContractAmount">계약 금액</label><input id="taskContractAmount" type="number" min="0" step="1000"></div>
+                <div class="field"><label for="taskPaidAmount">지급 금액</label><input id="taskPaidAmount" type="number" min="0" step="1000"></div>
+              </div>
+              <div class="field"><label for="taskDescription">작업 내용</label><textarea id="taskDescription" placeholder="시공 범위와 해야 할 작업을 적으세요."></textarea></div>
             </div>
-            <div style="margin-top:14px" id="checklistPreview" class="check-board"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="card span-7">
+    <section class="card span-12 materials-card">
       <div class="section-head">
         <div>
           <h2>자재 선정 / 결정 사항</h2>
@@ -254,7 +464,8 @@ tr.active-row { background:#eef5fb; }
         </div>
         <div class="right no-print"><button id="newMaterialBtn">품목 추가</button></div>
       </div>
-      <div class="table-wrap">
+      <div id="materialProcessTabs" class="process-tabs material-process-tabs no-print" role="tablist" aria-label="공정별 자재 탭"></div>
+      <div class="table-wrap materials-scroll" id="materialsScrollWrap">
         <table>
           <thead><tr><th>분류</th><th>품목</th><th>선정 내용</th><th>상태</th><th>메모</th><th class="no-print">관리</th></tr></thead>
           <tbody id="materialRows"></tbody>
@@ -262,12 +473,8 @@ tr.active-row { background:#eef5fb; }
       </div>
     </section>
 
-    <section class="card span-5">
-      <h2>업체/공정 빠른 요약</h2>
-      <div id="categorySummary"></div>
-      <hr style="border:0;border-top:1px solid var(--line); margin:14px 0;">
-      <div class="note">현재 기본 세팅은 화장실·줄눈만 업체 선정 상태, 나머지는 검토 전/검토 중으로 넣어두었습니다. 이후 직접 보면서 수정하면 됩니다.</div>
-    </section>
+
+    
 
     <section class="card span-12">
       <div class="section-head">
@@ -276,6 +483,8 @@ tr.active-row { background:#eef5fb; }
           <p class="helper">침대가 제거된 도면입니다. 펜, 형광펜, 지우개, 라벨 마커로 그림판처럼 표시할 수 있습니다.</p>
         </div>
       </div>
+      <div id="markupProcessTabs" class="process-tabs markup-process-tabs no-print" role="tablist" aria-label="도면 마크업 공정 선택"></div>
+      <p class="helper">선택한 공정의 도면 표시만 보입니다. 공정별 마크업은 서로 독립적으로 저장됩니다.</p>
       <div class="plan-wrap">
         <div class="plan-board">
           <div class="plan-toolbar no-print">
@@ -306,6 +515,7 @@ tr.active-row { background:#eef5fb; }
                 <option>확인 필요</option>
                 <option>기타</option>
               </select>
+              <input id="customMarkerLabel" type="text" maxlength="30" placeholder="직접 입력" aria-label="직접 입력할 라벨" style="width:130px;">
             </div>
             <div class="tool-group">
               <button class="small" id="undoMarkupBtn">되돌리기</button>
@@ -321,11 +531,7 @@ tr.active-row { background:#eef5fb; }
           </div>
           <p class="footer-note">마커 도구는 클릭한 위치에 라벨이 찍히고, 펜/형광펜/지우개는 자유롭게 그릴 수 있습니다. 마크업은 자동 저장됩니다.</p>
         </div>
-        <div class="card" style="box-shadow:none;">
-          <h3>도면 체크 포인트</h3>
-          <div class="check-board" id="planChecklistBoard"></div>
-          <div style="margin-top:12px" class="note">예시 체크포인트를 넣어두었습니다. 이 항목은 필요에 따라 자유롭게 체크하거나 작업 상세 메모와 같이 활용하면 됩니다.</div>
-        </div>
+
       </div>
     </section>
 
@@ -333,7 +539,7 @@ tr.active-row { background:#eef5fb; }
       <h2>현장 메모 / 미결 사항</h2>
       <label for="siteNotes">현장 기록</label>
       <textarea id="siteNotes" style="min-height:260px" placeholder="날짜별로 현장 확인 사항, 통화 내용, 변경점, 사진 파일명 등을 적으세요."></textarea>
-      <p class="footer-note">팁: 중요한 합의 사항은 해당 작업의 ‘협의안 / 시공법 메모’에도 함께 기록하면 나중에 찾기 쉽습니다.</p>
+      <p class="footer-note">팁: 시공 범위, 자재, 체크 항목, 협의 내용과 주의사항은 작업 내용에 함께 기록하세요.</p>
     </section>
   </div>
 
@@ -344,9 +550,10 @@ tr.active-row { background:#eef5fb; }
 (function() {
   const $ = id => document.getElementById(id);
   const STORAGE_KEY = 'self-interior-project-board-v2';
-  const categories = ['철거 공사','목공사','전기 공사','화장실','도배','필름','탄성코트','보양 작업'];
+  const defaultCategories = ['철거 공사','목공사','전기 공사','화장실','도배','필름','탄성코트','보양 작업'];
+  let categories = [...defaultCategories];
   const contractorStatuses = ['업체 수배 전','업체 검토 중','업체 선정','계약 완료','시공 중','시공 완료'];
-  const taskStatuses = ['아이디어','검토 중','확정','보류','완료'];
+  const taskStatuses = ['검토 중','확정','보류','완료'];
   const planChecklistDefaults = [
     '거실 콘센트 증설 위치 표시',
     '세탁기 위치 변경 관련 수도/하수 라인 체크',
@@ -365,6 +572,7 @@ tr.active-row { background:#eef5fb; }
   function today() { return new Date().toISOString().slice(0,10); }
 
   const defaultState = () => ({
+    customCategories: [],
     project: { projectName:'우리집 셀프 인테리어', unit:'', owner:'', phone:'', startDate:'', moveDate:'', budget:'', projectMemo:'' },
     tasks: [
       { id:uid(), category:'철거 공사', name:'베란다 철거', location:'베란다', contractorStatus:'업체 수배 전', status:'검토 중', priority:'상', vendor:'', vendorPhone:'', plannedStart:'', plannedEnd:'', expectedCost:'', contractAmount:'', paidAmount:'', description:'베란다 철거 진행. 세탁기 자리 변경과 연결되는 공사라 수도·하수 배관 공사와 연계 필요.', checklist:'세탁기 위치 최종 확정\n철거 범위 확인\n폐기물 처리 포함 여부 확인', materials:'', decisionNotes:'세탁기 자리 변경 동선과 함께 검토 필요', issueNotes:'배관 위치 변경과 공정 순서 협의 필요' },
@@ -406,6 +614,9 @@ tr.active-row { background:#eef5fb; }
 
   let state = defaultState();
   let selectedTaskId = state.tasks[0]?.id || '';
+  let selectedMaterialCategory = '전체 공정';
+  let selectedMarkupCategory = categories[0];
+  let calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   let activeTool = 'pen';
   let isDrawing = false;
   let currentPath = null;
@@ -415,18 +626,30 @@ tr.active-row { background:#eef5fb; }
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) state = Object.assign(defaultState(), JSON.parse(raw));
+      categories = [...defaultCategories, ...(Array.isArray(state.customCategories) ? state.customCategories : [])].filter((v, i, a) => a.indexOf(v) === i);
     } catch (e) { console.error(e); }
     if (!Array.isArray(state.tasks) || !state.tasks.length) state = defaultState();
+    state.tasks = state.tasks.map(t => t.status === '아이디어' ? {...t, status:'검토 중'} : t);
+    if (!state.markupByCategory || typeof state.markupByCategory !== 'object') {
+      state.markupByCategory = {};
+      if (state.markup && Array.isArray(state.markup.actions) && state.markup.actions.length) {
+        state.markupByCategory[categories[0]] = state.markup.actions;
+      }
+    }
+    categories.forEach(category => {
+      if (!Array.isArray(state.markupByCategory[category])) state.markupByCategory[category] = [];
+    });
     selectedTaskId = state.tasks[0]?.id || '';
   }
 
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     renderSummary();
+    renderProcessTabs();
     renderTaskRows();
     renderMaterials();
-    renderCategorySummary();
-    renderPlanChecklist();
+    renderMarkupTabs();
+    renderCalendar();
     redrawCanvas();
   }
 
@@ -443,9 +666,73 @@ tr.active-row { background:#eef5fb; }
     $('filterCategory').innerHTML = '<option value="">전체 공정</option>' + categories.map(x=>`<option>${safe(x)}</option>`).join('');
     $('filterContractorStatus').innerHTML = '<option value="">전체 업체 상태</option>' + contractorStatuses.map(x=>`<option>${safe(x)}</option>`).join('');
     $('filterTaskStatus').innerHTML = '<option value="">전체 작업 상태</option>' + taskStatuses.map(x=>`<option>${safe(x)}</option>`).join('');
-    $('taskCategory').innerHTML = categories.map(x=>`<option>${safe(x)}</option>`).join('');
     $('taskContractorStatus').innerHTML = contractorStatuses.map(x=>`<option>${safe(x)}</option>`).join('');
     $('taskStatus').innerHTML = taskStatuses.map(x=>`<option>${safe(x)}</option>`).join('');
+    updateTaskCategoryControl();
+    renderProcessTabs();
+  }
+
+  function updateTaskCategoryControl(categoryOverride) {
+    const activeCategory = $('filterCategory').value;
+    const currentCategory = categoryOverride || $('taskCategory').value || activeCategory || categories[0];
+    const choices = activeCategory ? [activeCategory] : categories;
+    $('taskCategory').innerHTML = choices.map(x=>`<option value="${safe(x)}">${safe(x)}</option>`).join('');
+    $('taskCategory').value = choices.includes(currentCategory) ? currentCategory : (activeCategory || categories[0]);
+    // 개별 공정 탭에서는 공정 분류를 바꿀 필요가 없으므로 선택 항목 자체를 숨깁니다.
+    $('taskCategoryField').hidden = Boolean(activeCategory);
+    $('newTaskBtn').textContent = activeCategory ? `${activeCategory} 세부 작업 추가` : '세부 작업 추가';
+  }
+
+  function addProcessCategory() {
+    const entered = prompt('추가할 공정명을 입력하세요. 예: 도어 교체');
+    if (entered === null) return;
+    const name = entered.trim();
+    if (!name) { alert('공정명을 입력해 주세요.'); return; }
+    if (categories.some(category => category.toLowerCase() === name.toLowerCase())) {
+      alert('이미 존재하는 공정입니다.');
+      return;
+    }
+    categories.push(name);
+    state.customCategories = categories.filter(category => !defaultCategories.includes(category));
+    // Ensure the new category is available to drawing layers and material tabs too.
+    if (!state.markupByCategory) state.markupByCategory = {};
+    if (!Array.isArray(state.markupByCategory[name])) state.markupByCategory[name] = [];
+    selectedMarkupCategory = name;
+    selectedMaterialCategory = name;
+    renderFilterOptions();
+    $('filterCategory').value = name;
+    updateTaskCategoryControl(name);
+    renderProcessTabs();
+    renderTaskRows();
+    renderMaterials();
+    renderMarkupTabs();
+    renderCalendar();
+    save();
+  }
+
+  function renderProcessTabs() {
+    const selected = $('filterCategory').value;
+    const tabs = [{ name:'', label:'전체 공정' }, ...categories.map(name => ({ name, label:name }))];
+    $('processTabs').innerHTML = tabs.map(tab => {
+      const count = tab.name ? state.tasks.filter(t => t.category === tab.name).length : state.tasks.length;
+      const active = selected === tab.name;
+      return `<button type="button" class="process-tab ${active ? 'active' : ''}" role="tab" aria-selected="${active}" data-process-tab="${safe(tab.name)}"><span>${safe(tab.label)}</span><span class="tab-count">${count}</span></button>`;
+    }).join('');
+    document.querySelectorAll('[data-process-tab]').forEach(btn => btn.addEventListener('click', () => {
+      const nextCategory = btn.dataset.processTab;
+      $('filterCategory').value = nextCategory;
+      updateTaskCategoryControl(nextCategory);
+      renderProcessTabs();
+      renderTaskRows();
+      const selectedTask = getSelectedTask();
+      if (selectedTask && (!nextCategory || selectedTask.category === nextCategory)) {
+        updateTaskCategoryControl(selectedTask.category);
+      } else {
+        const first = filteredTasks()[0];
+        if (first) { selectedTaskId = first.id; loadTaskEditor(first); }
+        else newTask();
+      }
+    }));
   }
 
   function filteredTasks() {
@@ -480,11 +767,20 @@ tr.active-row { background:#eef5fb; }
         <td>${won(taskDisplayAmount(t))}</td>
       </tr>
     `).join('') || '<tr><td colspan="7" style="text-align:center; color:#6b7280;">조건에 맞는 작업이 없습니다.</td></tr>';
-    document.querySelectorAll('[data-task-row]').forEach(el => el.onclick = () => { selectedTaskId = el.dataset.taskRow; loadTaskEditor(); renderTaskRows(); });
+    document.querySelectorAll('[data-task-row]').forEach(el => el.onclick = () => {
+      selectedTaskId = el.dataset.taskRow;
+      const clickedTask = state.tasks.find(t => t.id === selectedTaskId);
+      if (clickedTask) loadTaskEditor(clickedTask);
+      renderTaskRows();
+    });
   }
 
   function getSelectedTask() {
-    return state.tasks.find(t => t.id === selectedTaskId) || state.tasks[0] || null;
+    // 표에서 선택한 행과 편집창의 ID를 일치시켜, 이전 편집 대상이 남아
+    // 복제/삭제 대상이 잘못되는 문제를 방지합니다.
+    const editorId = $('taskId')?.value;
+    const targetId = selectedTaskId || editorId;
+    return state.tasks.find(t => t.id === targetId) || state.tasks.find(t => t.id === editorId) || null;
   }
 
   function loadTaskEditor(task = null) {
@@ -492,65 +788,46 @@ tr.active-row { background:#eef5fb; }
     if (!t) return;
     $('editorTitle').textContent = t.name ? `작업 상세 편집 · ${t.name}` : '새 작업 추가';
     $('taskId').value = t.id;
-    $('taskCategory').value = t.category;
+    updateTaskCategoryControl(t.category);
+    $('taskCategory').value = $('filterCategory').value || t.category;
     $('taskName').value = t.name || '';
     $('taskLocation').value = t.location || '';
     $('taskContractorStatus').value = t.contractorStatus || contractorStatuses[0];
     $('taskStatus').value = t.status || taskStatuses[0];
-    $('taskPriority').value = t.priority || '중';
     $('taskVendor').value = t.vendor || '';
-    $('taskVendorPhone').value = t.vendorPhone || '';
     $('taskPlannedStart').value = t.plannedStart || '';
     $('taskPlannedEnd').value = t.plannedEnd || '';
     $('taskExpectedCost').value = t.expectedCost || '';
     $('taskContractAmount').value = t.contractAmount || '';
     $('taskPaidAmount').value = t.paidAmount || '';
-    $('taskDescription').value = t.description || '';
-    $('taskChecklist').value = t.checklist || '';
-    $('taskMaterials').value = t.materials || '';
-    $('taskDecisionNotes').value = t.decisionNotes || '';
-    $('taskIssueNotes').value = t.issueNotes || '';
-    updateTaskRemaining();
-    renderChecklistPreview();
-  }
-
-  function updateTaskRemaining() {
-    const contract = num($('taskContractAmount').value) || num($('taskExpectedCost').value);
-    const paid = num($('taskPaidAmount').value);
-    $('taskRemaining').value = won(Math.max(contract - paid, 0));
-  }
-
-  ['taskExpectedCost','taskContractAmount','taskPaidAmount'].forEach(id => {
-    document.addEventListener('input', e => { if (e.target && e.target.id === id) updateTaskRemaining(); });
-  });
-
-  function renderChecklistPreview() {
-    const lines = ($('taskChecklist').value || '').split(/\n+/).map(x => x.trim()).filter(Boolean);
-    $('checklistPreview').innerHTML = lines.length ? lines.map(line => `<label class="check-item"><input type="checkbox"><div><b>${safe(line)}</b><div class="helper">이 미리보기는 체크리스트 예시입니다. 실제 텍스트는 위 textarea에서 관리합니다.</div></div></label>`).join('') : '<div class="helper">체크리스트를 줄바꿈으로 입력하면 여기에 미리보기가 표시됩니다.</div>';
+    const descriptionParts = [t.description || ''];
+    if (t.checklist) descriptionParts.push('체크리스트\n' + t.checklist);
+    if (t.materials) descriptionParts.push('자재 / 제품\n' + t.materials);
+    if (t.decisionNotes) descriptionParts.push('협의안 / 시공법\n' + t.decisionNotes);
+    if (t.issueNotes) descriptionParts.push('주의사항 / 리스크\n' + t.issueNotes);
+    $('taskDescription').value = descriptionParts.filter(Boolean).join('\n\n');
   }
 
   function saveTaskFromEditor() {
     const id = $('taskId').value || uid();
     const data = {
       id,
-      category: $('taskCategory').value,
+      category: $('filterCategory').value || $('taskCategory').value,
       name: $('taskName').value.trim() || '새 작업',
       location: $('taskLocation').value.trim(),
       contractorStatus: $('taskContractorStatus').value,
       status: $('taskStatus').value,
-      priority: $('taskPriority').value,
       vendor: $('taskVendor').value.trim(),
-      vendorPhone: $('taskVendorPhone').value.trim(),
       plannedStart: $('taskPlannedStart').value,
       plannedEnd: $('taskPlannedEnd').value,
       expectedCost: $('taskExpectedCost').value,
       contractAmount: $('taskContractAmount').value,
       paidAmount: $('taskPaidAmount').value,
       description: $('taskDescription').value.trim(),
-      checklist: $('taskChecklist').value.trim(),
-      materials: $('taskMaterials').value.trim(),
-      decisionNotes: $('taskDecisionNotes').value.trim(),
-      issueNotes: $('taskIssueNotes').value.trim()
+      checklist: '',
+      materials: '',
+      decisionNotes: '',
+      issueNotes: ''
     };
     const idx = state.tasks.findIndex(t => t.id === id);
     if (idx >= 0) state.tasks[idx] = data; else state.tasks.unshift(data);
@@ -560,7 +837,8 @@ tr.active-row { background:#eef5fb; }
   }
 
   function newTask() {
-    const data = { id: uid(), category: categories[0], name:'', location:'', contractorStatus: contractorStatuses[0], status: taskStatuses[0], priority:'중', vendor:'', vendorPhone:'', plannedStart:'', plannedEnd:'', expectedCost:'', contractAmount:'', paidAmount:'', description:'', checklist:'', materials:'', decisionNotes:'', issueNotes:'' };
+    const activeCategory = $('filterCategory').value;
+    const data = { id: uid(), category: activeCategory || categories[0], name:'', location:'', contractorStatus: contractorStatuses[0], status: taskStatuses[0], vendor:'', vendorPhone:'', plannedStart:'', plannedEnd:'', expectedCost:'', contractAmount:'', paidAmount:'', description:'', checklist:'', materials:'', decisionNotes:'', issueNotes:'' };
     selectedTaskId = data.id;
     loadTaskEditor(data);
   }
@@ -575,14 +853,69 @@ tr.active-row { background:#eef5fb; }
     loadTaskEditor();
   }
 
-  function deleteSelectedTask() {
-    const t = getSelectedTask();
-    if (!t) return;
-    if (!confirm('선택한 작업을 삭제할까요?')) return;
-    state.tasks = state.tasks.filter(x => x.id !== t.id);
-    selectedTaskId = state.tasks[0]?.id || '';
+  function deleteSelectedTask(event) {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    const editorId = String($('taskId')?.value || '');
+    const selectedId = String(selectedTaskId || '');
+    const targetId = editorId && state.tasks.some(t => String(t.id) === editorId) ? editorId : selectedId;
+    const target = state.tasks.find(t => String(t.id) === targetId);
+    if (!target) { alert('삭제할 작업을 목록에서 선택해 주세요.'); return; }
+
+    // 즉시 제거하고 앱의 공통 저장/렌더 경로로 모든 화면을 갱신합니다.
+    state.tasks = state.tasks.filter(t => String(t.id) !== targetId);
+    const activeCategory = $('filterCategory')?.value || '';
+    const nextTask = state.tasks.find(t => !activeCategory || t.category === activeCategory) || state.tasks[0] || null;
+    if (nextTask) {
+      selectedTaskId = String(nextTask.id);
+      loadTaskEditor(nextTask);
+    } else {
+      selectedTaskId = '';
+      const fresh = { id:uid(), category:activeCategory || categories[0], name:'', location:'',
+        contractorStatus:contractorStatuses[0], status:taskStatuses[0], vendor:'',
+        plannedStart:'', plannedEnd:'', expectedCost:'', contractAmount:'', paidAmount:'',
+        description:'', checklist:'', materials:'', decisionNotes:'', issueNotes:'' };
+      loadTaskEditor(fresh);
+    }
     save();
-    if (selectedTaskId) loadTaskEditor(); else newTask();
+  }
+
+  function taskColor(task) {
+    let hash = 0;
+    for (const ch of String(task.id || task.name || 'task')) hash = ((hash * 31) + ch.charCodeAt(0)) >>> 0;
+    return `hsl(${hash % 360} 78% 84%)`;
+  }
+
+  function renderCalendar() {
+    const grid = $('scheduleCalendar');
+    if (!grid) return;
+    const tasks = state.tasks.map(t => ({...t}));
+    const editorId = $('taskId')?.value;
+    const draft = tasks.find(t => t.id === editorId);
+    if (draft) {
+      draft.plannedStart = $('taskPlannedStart')?.value || '';
+      draft.plannedEnd = $('taskPlannedEnd')?.value || '';
+      draft.name = $('taskName')?.value?.trim() || draft.name || '새 작업';
+    }
+    const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
+    $('calendarMonthLabel').textContent = `${year}년 ${month + 1}월`;
+    const first = new Date(year, month, 1), start = new Date(year, month, 1 - first.getDay());
+    const today = new Date(), todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    let markup = ['일','월','화','수','목','금','토'].map(d => `<div class="calendar-weekday">${d}</div>`).join('');
+    for (let i=0;i<42;i++) {
+      const day = new Date(start); day.setDate(start.getDate()+i);
+      const key = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
+      const events = tasks.filter(t => t.plannedStart && t.plannedEnd && t.plannedEnd >= t.plannedStart && key >= t.plannedStart && key <= t.plannedEnd);
+      markup += `<div class="calendar-day ${day.getMonth()!==month?'other-month':''} ${key===todayKey?'today':''}"><div class="calendar-date">${day.getDate()}</div>${events.map(t=>`<button type="button" class="calendar-event" data-calendar-task="${safe(t.id)}" style="background:${taskColor(t)}" title="${safe(t.category)} · ${safe(t.name)}"><span class="calendar-event-category">${safe(t.category)}</span><span class="calendar-event-name">${safe(t.name||'이름 없는 작업')}</span></button>`).join('')}</div>`;
+    }
+    grid.innerHTML = markup;
+    const scheduled = tasks.filter(t => t.plannedStart && t.plannedEnd && t.plannedEnd >= t.plannedStart);
+    $('calendarLegend').innerHTML = scheduled.map(t=>`<span class="calendar-legend-item"><i class="calendar-swatch" style="background:${taskColor(t)}"></i>${safe(t.category)} · ${safe(t.name||'이름 없는 작업')}</span>`).join('') || '<span class="helper">시작일과 종료일을 입력하면 일정이 표시됩니다.</span>';
+    grid.querySelectorAll('[data-calendar-task]').forEach(btn=>btn.addEventListener('click',()=>{
+      const task=state.tasks.find(t=>t.id===btn.dataset.calendarTask); if(!task)return;
+      selectedTaskId=task.id; $('filterCategory').value=task.category; updateTaskCategoryControl(task.category);
+      renderProcessTabs(); renderTaskRows(); loadTaskEditor(task);
+      $('editorTitle')?.scrollIntoView({behavior:'smooth',block:'center'});
+    }));
   }
 
   function renderSummary() {
@@ -597,15 +930,33 @@ tr.active-row { background:#eef5fb; }
     $('confirmedVendorsText').textContent = confirmed.length ? confirmed.join(' / ') : '아직 확정된 업체 없음';
   }
 
+  function renderMaterialProcessTabs() {
+    const host = $('materialProcessTabs');
+    if (!host) return;
+    const counts = Object.fromEntries(categories.map(cat => [cat, state.materials.filter(m => m.category === cat).length]));
+    host.innerHTML = ['전체 공정', ...categories].map(cat => `
+      <button type="button" class="process-tab ${selectedMaterialCategory === cat ? 'active' : ''}" role="tab" aria-selected="${selectedMaterialCategory === cat}" data-material-tab="${safe(cat)}">
+        ${safe(cat)} <span class="tab-count">${cat === '전체 공정' ? state.materials.length : counts[cat]}</span>
+      </button>`).join('');
+    host.querySelectorAll('[data-material-tab]').forEach(btn => btn.addEventListener('click', () => {
+      selectedMaterialCategory = btn.dataset.materialTab;
+      renderMaterials();
+    }));
+  }
+
   function renderMaterials() {
-    $('materialRows').innerHTML = state.materials.map(m => `
+    const materialsWrap = $('materialsScrollWrap');
+    if (materialsWrap) materialsWrap.classList.toggle('is-scrollable', state.materials.filter(m => selectedMaterialCategory === '전체 공정' || m.category === selectedMaterialCategory).length > 5);
+    renderMaterialProcessTabs();
+    const visibleMaterials = state.materials.filter(m => selectedMaterialCategory === '전체 공정' || m.category === selectedMaterialCategory);
+    $('materialRows').innerHTML = visibleMaterials.map(m => `
       <tr>
-        <td><input data-material="category" data-id="${m.id}" value="${safe(m.category)}"></td>
+        <td><select data-material="category" data-id="${m.id}">${categories.map(cat=>`<option value="${safe(cat)}" ${m.category===cat?'selected':''}>${safe(cat)}</option>`).join('')}</select></td>
         <td><input data-material="item" data-id="${m.id}" value="${safe(m.item)}"></td>
         <td><input data-material="selection" data-id="${m.id}" value="${safe(m.selection)}"></td>
         <td>
           <select data-material="status" data-id="${m.id}">
-            ${['미선정','검토 중','선정 완료'].map(s=>`<option ${m.status===s?'selected':''}>${s}</option>`).join('')}
+            ${['미선정','검토 중','선정 완료'].map(st=>`<option ${m.status===st?'selected':''}>${st}</option>`).join('')}
           </select>
         </td>
         <td><input data-material="note" data-id="${m.id}" value="${safe(m.note)}"></td>
@@ -626,29 +977,30 @@ tr.active-row { background:#eef5fb; }
   }
 
   function addMaterial() {
-    state.materials.push({ id:uid(), category:'', item:'', selection:'', status:'미선정', note:'' });
+    const category = selectedMaterialCategory === '전체 공정' ? categories[0] : selectedMaterialCategory;
+    state.materials.push({ id:uid(), category, item:'', selection:'', status:'미선정', note:'' });
     save();
   }
 
-  function renderCategorySummary() {
-    $('categorySummary').innerHTML = categories.map(cat => {
-      const items = state.tasks.filter(t => t.category === cat);
-      const done = items.filter(t => t.status === '완료' || t.contractorStatus === '시공 완료').length;
-      const selected = items.filter(t => ['업체 선정','계약 완료','시공 중','시공 완료'].includes(t.contractorStatus)).length;
-      return `<div class="summary-line"><div><strong>${safe(cat)}</strong><div class="helper">작업 ${items.length}개 · 업체선정 ${selected}개</div></div><div><span class="pill">완료 ${done}</span></div></div>`;
-    }).join('');
+  function getActiveMarkupActions() {
+    if (!state.markupByCategory) state.markupByCategory = {};
+    if (!Array.isArray(state.markupByCategory[selectedMarkupCategory])) state.markupByCategory[selectedMarkupCategory] = [];
+    return state.markupByCategory[selectedMarkupCategory];
   }
 
-  function renderPlanChecklist() {
-    $('planChecklistBoard').innerHTML = (state.planChecklist || []).map((item, idx) => `
-      <label class="check-item">
-        <input type="checkbox" data-plan-check="${idx}" ${item.checked ? 'checked' : ''}>
-        <div><b>${safe(item.text)}</b></div>
-      </label>
-    `).join('');
-    document.querySelectorAll('[data-plan-check]').forEach(el => el.onchange = () => {
-      state.planChecklist[Number(el.dataset.planCheck)].checked = el.checked;
-      save();
+  function renderMarkupTabs() {
+    const host = $('markupProcessTabs');
+    if (!host) return;
+    host.innerHTML = categories.map(category => {
+      const count = (state.markupByCategory?.[category] || []).length;
+      return `<button type="button" class="process-tab ${category === selectedMarkupCategory ? 'active' : ''}" role="tab" aria-selected="${category === selectedMarkupCategory}" data-markup-category="${safe(category)}">${safe(category)} <span class="tab-count">${count}</span></button>`;
+    }).join('');
+    host.querySelectorAll('[data-markup-category]').forEach(button => {
+      button.addEventListener('click', () => {
+        selectedMarkupCategory = button.dataset.markupCategory;
+        renderMarkupTabs();
+        redrawCanvas();
+      });
     });
   }
 
@@ -677,14 +1029,14 @@ tr.active-row { background:#eef5fb; }
     canvas.addEventListener('pointerdown', e => {
       const pos = getPos(e);
       if (activeTool === 'marker') {
-        state.markup.actions.push({ type:'marker', x:pos.x, y:pos.y, color:$('drawColor').value, size:Number($('drawSize').value), label:$('markerLabel').value });
+        getActiveMarkupActions().push({ type:'marker', x:pos.x, y:pos.y, color:$('drawColor').value, size:Number($('drawSize').value), label:($('customMarkerLabel').value.trim() || $('markerLabel').value) });
         save();
         return;
       }
       isDrawing = true;
       canvas.setPointerCapture(e.pointerId);
       currentPath = { type:'path', tool:activeTool, color:$('drawColor').value, size:Number($('drawSize').value), points:[pos] };
-      state.markup.actions.push(currentPath);
+      getActiveMarkupActions().push(currentPath);
       redrawCanvas();
     });
     canvas.addEventListener('pointermove', e => {
@@ -752,20 +1104,21 @@ tr.active-row { background:#eef5fb; }
   function redrawCanvas() {
     if (!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const actions = (state.markup && state.markup.actions) || [];
+    const actions = getActiveMarkupActions();
     actions.forEach(action => {
       if (action.type === 'marker') drawMarker(action); else drawPath(action);
     });
   }
 
   function undoMarkup() {
-    if (!(state.markup && state.markup.actions && state.markup.actions.length)) return;
-    state.markup.actions.pop();
+    const actions = getActiveMarkupActions();
+    if (!actions.length) return;
+    actions.pop();
     save();
   }
   function clearMarkup() {
     if (!confirm('도면 마크업을 모두 지울까요?')) return;
-    state.markup.actions = [];
+    state.markupByCategory[selectedMarkupCategory] = [];
     save();
   }
 
@@ -778,7 +1131,7 @@ tr.active-row { background:#eef5fb; }
     const scaleX = temp.width / canvas.width;
     const scaleY = temp.height / canvas.height;
     tctx.scale(scaleX, scaleY);
-    const actions = (state.markup && state.markup.actions) || [];
+    const actions = getActiveMarkupActions();
     actions.forEach(action => {
       if (action.type === 'marker') drawMarker(action, tctx); else drawPath(action, tctx);
     });
@@ -824,20 +1177,24 @@ tr.active-row { background:#eef5fb; }
     renderSummary();
     renderTaskRows();
     loadTaskEditor();
-    renderChecklistPreview();
     renderMaterials();
-    renderCategorySummary();
-    renderPlanChecklist();
+    renderMarkupTabs();
+    renderCalendar();
   }
 
   load();
   bindProjectFields();
   renderAll();
-  $('taskChecklist').addEventListener('input', renderChecklistPreview);
   $('searchTask').addEventListener('input', renderTaskRows);
-  ['filterCategory','filterContractorStatus','filterTaskStatus'].forEach(id => $(id).addEventListener('change', renderTaskRows));
+  $('filterCategory').addEventListener('change', () => { renderProcessTabs(); renderTaskRows(); });
+  ['filterContractorStatus','filterTaskStatus'].forEach(id => $(id).addEventListener('change', renderTaskRows));
+  $('calendarPrevBtn').addEventListener('click', () => { calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth()-1, 1); renderCalendar(); });
+  $('calendarNextBtn').addEventListener('click', () => { calendarMonth = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth()+1, 1); renderCalendar(); });
+  $('calendarTodayBtn').addEventListener('click', () => { calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1); renderCalendar(); });
+  ['taskPlannedStart','taskPlannedEnd','taskName'].forEach(id => $(id).addEventListener('input', renderCalendar));
   $('saveTaskBtn').addEventListener('click', saveTaskFromEditor);
   $('deleteTaskBtn').addEventListener('click', deleteSelectedTask);
+  $('addProcessBtn').addEventListener('click', addProcessCategory);
   $('newTaskBtn').addEventListener('click', newTask);
   $('duplicateTaskBtn').addEventListener('click', duplicateTask);
   $('newMaterialBtn').addEventListener('click', addMaterial);
@@ -850,6 +1207,7 @@ tr.active-row { background:#eef5fb; }
   document.querySelectorAll('.tool-btn').forEach(btn => btn.addEventListener('click', () => { activeTool = btn.dataset.tool; document.querySelectorAll('.tool-btn').forEach(x => x.style.background=''); btn.style.background = '#dcebf7'; }));
   document.querySelector('.tool-btn[data-tool="pen"]').style.background = '#dcebf7';
   $('undoMarkupBtn').addEventListener('click', undoMarkup);
+  $('customMarkerLabel').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); } });
   $('clearMarkupBtn').addEventListener('click', clearMarkup);
   $('downloadPlanBtn').addEventListener('click', downloadMergedPlan);
   setupMarkupCanvas();
